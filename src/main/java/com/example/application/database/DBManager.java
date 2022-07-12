@@ -25,6 +25,7 @@ public class DBManager {
     }
 
     public static void connectDB() {
+
         try {
             // TODO Change credentials
             connection = DriverManager

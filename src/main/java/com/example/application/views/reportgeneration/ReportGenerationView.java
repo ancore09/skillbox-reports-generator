@@ -6,6 +6,7 @@ import com.example.application.data.entity.SampleContractor;
 import com.example.application.data.entity.SampleReport;
 import com.example.application.data.report.FileProvider;
 import com.example.application.data.report.GenerateReport;
+import com.example.application.jira.JiraManager;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;
@@ -178,6 +179,9 @@ public class ReportGenerationView extends Div {
         }
 
         if (state == 1) {
+            if (!JiraManager.getConnectionState()) {
+                JiraManager.connectClient();
+            }
             showNotification();
         }
     }
@@ -192,6 +196,16 @@ public class ReportGenerationView extends Div {
         Div uploadSuccessful = new Div(new Text("Отчёт успешно сформирован"));
 
         FileProvider provider = new FileProvider();
+
+        String url = provider
+                .createSharedLink("/Сформированные отчёты/" + searchedContractor.getLastName() + " "
+                        + WordsConverter.convertNumericMonthToString(searchedPeriodStart.getMonthValue()) + " "
+                        + searchedReport.getCourseCode() + ".docx");
+
+        JiraManager.createIssue("STP", 10004L, "Отчет " + searchedContractor.getLastName() + " "
+                + WordsConverter.convertNumericMonthToString(searchedPeriodStart.getMonthValue()) + " "
+                + searchedReport.getCourseCode() , url);
+
         Button showReportButton = new Button("Посмотреть отчёт");
         showReportButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
         showReportButton.getElement().getStyle().set("margin-left", "var(--lumo-space-xl)");

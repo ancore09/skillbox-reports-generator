@@ -581,12 +581,12 @@ public class GenerateReport {
             double reward = F * Double.parseDouble(report.getRoyaltyPercentage()) / 100;
             rewardResult = df.format(reward);
         }
-        double rewardResDouble = Double.parseDouble(rewardResult);
+        double rewardResDouble = Double.parseDouble(rewardResult.replace(",", "."));
         return nf.format(rewardResDouble);
     }
 
     private int getRubles() {
-        return Integer.parseInt(rewardResult.split("\\.")[0]);
+        return Integer.parseInt(rewardResult.split("\\,")[0]);
     }
 
     private static String replaceTag(String text, String tag, String replacementText) {
