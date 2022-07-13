@@ -29,7 +29,7 @@ public class DBManager {
         try {
             // TODO Change credentials
             connection = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/skillboxreports_new",
+                    .getConnection("jdbc:postgresql://172.18.0.2:5432/skillboxreports_new",
                             "postgres", "outofstyle");
 
             isConnected = true;
@@ -558,7 +558,7 @@ public class DBManager {
     public static void createCSVFromLogsTable(String filename) throws SQLException, IOException {
         CopyManager copyManager = new CopyManager((BaseConnection) connection);
         // TODO Change to storage folder
-        String path = "/Users/ancored/Downloads/shared/" + filename;
+        String path = "/logs/" + filename;
         File file = new File(path);
         FileOutputStream fileOutputStream = new FileOutputStream(file);
         String sql = "SELECT * FROM public.logs";

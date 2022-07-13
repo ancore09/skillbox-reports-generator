@@ -179,9 +179,9 @@ public class ReportGenerationView extends Div {
         }
 
         if (state == 1) {
-            if (!JiraManager.getConnectionState()) {
-                JiraManager.connectClient();
-            }
+            //if (!JiraManager.getConnectionState()) {
+            //    JiraManager.connectClient();
+            //}
             showNotification();
         }
     }
@@ -202,9 +202,9 @@ public class ReportGenerationView extends Div {
                         + WordsConverter.convertNumericMonthToString(searchedPeriodStart.getMonthValue()) + " "
                         + searchedReport.getCourseCode() + ".docx");
 
-        JiraManager.createIssue("STP", 10004L, "Отчет " + searchedContractor.getLastName() + " "
-                + WordsConverter.convertNumericMonthToString(searchedPeriodStart.getMonthValue()) + " "
-                + searchedReport.getCourseCode() , url);
+        //JiraManager.createIssue("STP", 10004L, "Отчет " + searchedContractor.getLastName() + " "
+        //        + WordsConverter.convertNumericMonthToString(searchedPeriodStart.getMonthValue()) + " "
+        //        + searchedReport.getCourseCode() , url);
 
         Button showReportButton = new Button("Посмотреть отчёт");
         showReportButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);

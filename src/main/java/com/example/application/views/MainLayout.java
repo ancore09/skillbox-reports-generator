@@ -311,7 +311,7 @@ public class MainLayout extends AppLayout {
                 DBManager.createCSVFromLogsTable(filename);
 
                 // Url to the file server
-                String url = "http://localhost:3000/" + filename;
+                String url = "http://194.67.113.205:3000/" + filename;
 
                 // redirect to file server for downloading csv file
                 getUI().get().getPage().open(url, "_blank");

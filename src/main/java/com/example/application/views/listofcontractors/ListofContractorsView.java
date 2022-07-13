@@ -211,7 +211,6 @@ public class ListofContractorsView extends Div {
 
         TextField ITNField = new TextField();
         ITNField.setWidthFull();
-        ITNField.setVisible(false);
         binder.forField(ITNField)
                 .withValidator(s -> !ITNField.isVisible() || ITNField.isVisible() && !s.isEmpty(), "Form name must not be empty")
                 .bind(SampleContractor::getITN, SampleContractor::setITN);
@@ -221,7 +220,6 @@ public class ListofContractorsView extends Div {
         proxyNumberField.setWidthFull();
         proxyNumberField.setVisible(false);
         binder.forField(proxyNumberField)
-                .withValidator(s -> !proxyNumberField.isVisible() || proxyNumberField.isVisible() && !s.isEmpty(), "Form name must not be empty")
                 .bind(SampleContractor::getProxyNumber, SampleContractor::setProxyNumber);
         proxyNumberColumn.setEditorComponent(proxyNumberField);
 
@@ -229,7 +227,6 @@ public class ListofContractorsView extends Div {
         proxyDatePicker.setWidthFull();
         proxyDatePicker.setVisible(false);
         binder.forField(proxyDatePicker)
-                .withValidator(s -> !proxyDatePicker.isVisible() || proxyDatePicker.isVisible() && !s.toString().isEmpty(), "Form name must not be empty")
                 .bind(SampleContractor::getProxyDate, SampleContractor::setProxyDate);
         proxyDateColumn.setEditorComponent(proxyDatePicker);
 
@@ -241,16 +238,21 @@ public class ListofContractorsView extends Div {
                     OOONameField.setVisible(true);
                     taxPercentageField.setVisible(true);
                     signatoryPositionField.setVisible(true);
+                    ITNField.setVisible(true);
+                    proxyDatePicker.setVisible(true);
+                    proxyNumberField.setVisible(true);
                     break;
                 case "Физическое лицо":
                     ITNField.setVisible(true);
                     break;
                 case "Самозанятый":
                     selfemployedDatePicker.setVisible(true);
+                    ITNField.setVisible(true);
                     registrationCertificateNumberField.setVisible(true);
                     registrationCertificateDatePicker.setVisible(true);
                     break;
                 case "Индивидуальный предприниматель":
+                    ITNField.setVisible(true);
                     registrationNumberField.setVisible(true);
                     break;
                 default:
@@ -267,7 +269,7 @@ public class ListofContractorsView extends Div {
                     selfemployedDatePicker,
                     registrationCertificateNumberField,
                     registrationCertificateDatePicker,
-                    registrationNumberField, ITNField);
+                    registrationNumberField, ITNField, proxyNumberField, proxyDatePicker);
         });
 
         editor.addCancelListener(editorCancelEvent -> {
@@ -279,7 +281,7 @@ public class ListofContractorsView extends Div {
                     selfemployedDatePicker,
                     registrationCertificateNumberField,
                     registrationCertificateDatePicker,
-                    registrationNumberField, ITNField);
+                    registrationNumberField, ITNField, proxyNumberField, proxyDatePicker);
         });
 
         editor.addSaveListener(editorSaveEvent -> {
@@ -291,7 +293,7 @@ public class ListofContractorsView extends Div {
                     selfemployedDatePicker,
                     registrationCertificateNumberField,
                     registrationCertificateDatePicker,
-                    registrationNumberField, ITNField);
+                    registrationNumberField, ITNField, proxyNumberField, proxyDatePicker);
 
             DBManager.updateContractor(editorSaveEvent.getItem());
             System.out.println("Edited: " + editorSaveEvent.getItem().getLastName());
@@ -309,7 +311,7 @@ public class ListofContractorsView extends Div {
         editColumn.setEditorComponent(actions);
     }
 
-    private void setVisibilityFalse(TextField OOOFormField, TextField OOONameField, TextField taxPercentageField, TextField signatoryPositionField, DatePicker selfemployedDatePicker, TextField registrationCertificateNumberField, DatePicker registrationCertificateDatePicker, TextField registrationNumberField, TextField ITNField) {
+    private void setVisibilityFalse(TextField OOOFormField, TextField OOONameField, TextField taxPercentageField, TextField signatoryPositionField, DatePicker selfemployedDatePicker, TextField registrationCertificateNumberField, DatePicker registrationCertificateDatePicker, TextField registrationNumberField, TextField ITNField, TextField proxyNumber, DatePicker proxyDate) {
         OOOFormField.setVisible(false);
         OOONameField.setVisible(false);
         taxPercentageField.setVisible(false);
@@ -319,6 +321,8 @@ public class ListofContractorsView extends Div {
         registrationCertificateNumberField.setVisible(false);
         registrationCertificateDatePicker.setVisible(false);
         registrationNumberField.setVisible(false);
+        proxyDate.setVisible(false);
+        proxyNumber.setVisible(false);
     }
 
     private void removeContractor(SampleContractor contractor) {
