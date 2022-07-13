@@ -281,6 +281,9 @@ public class ReportGenerationView extends Div {
         // NEW //
         name.setItems(contractors);
         name.setItemLabelGenerator(contractor -> {
+            if (contractor.getContractorType().equals("Юридическое лицо")) {
+                return contractor.getOOOName();
+            }
             return contractor.getLastName() + " " + contractor.getFirstName() + " " + contractor.getSecondName();
         });
         courseName.setItems(coursesForContractor(-1));
