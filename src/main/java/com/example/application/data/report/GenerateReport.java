@@ -12,6 +12,7 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTRow;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -42,9 +43,6 @@ public class GenerateReport {
                           LocalDate periodStart, LocalDate periodEnd) {
         this.contractor = contractor;
         this.report = report;
-
-
-
         this.periodStart = periodStart;
         this.periodEnd = periodEnd;
         parsing = new ExcelParsing(periodStart.getMonthValue(), Integer.parseInt(report.getCourseCode()));
@@ -248,11 +246,6 @@ public class GenerateReport {
         text = replaceTag(text, "K2Sum", nf.format(parsing.getProceedTotalsSum() *
                 Double.parseDouble(report.getK2().replace(',', '.')) / 100));
 
-        /*text = replaceTag(text, "CustomerHWCosts", nf.format(parsing.getCustomerHWCostsSum()));
-        text = replaceTag(text, "CustomerDiplomaCosts", nf.format(parsing.getCustomerDiplomaCostsSum()));*/
-        /*double oa = parsing.getCustomerHWCostsSum() + parsing.getCustomerDiplomaCostsSum();
-        text = replaceTag(text, "CustomerCostsSum", nf.format(oa));*/
-
         text = replaceTag(text, "ExecutorHWCosts", nf.format(parsing.getExecutorHWCostsSum()));
         text = replaceTag(text, "ExecutorDiplomaCosts", nf.format(parsing.getExecutorDiplomaCostsSum()));
         double ob = parsing.getExecutorHWCostsSum() + parsing.getExecutorDiplomaCostsSum();
@@ -263,10 +256,6 @@ public class GenerateReport {
         int customerDiplomaNum = parsing.getCustomerDiplomaNumber();
         int executorDiplomaNum = parsing.getExecutorDiplomaNumber();
         text = changePrices(parsing, text);
-        /*text = replaceTag(text, "CustomerHWPrice",
-                getPricesForK2(parsing.getCustomerHWCostsSum(), customerHWNum, 200));
-        text = replaceTag(text, "CustomerDiplomaPrice",
-                getPricesForK2(parsing.getCustomerDiplomaCostsSum(), customerDiplomaNum, 1000));*/
         text = replaceTag(text, "ExecutorHWPrice",
                 getPricesForK2(parsing.getExecutorHWCostsSum(), executorHWNum, 200));
         text = replaceTag(text, "ExecutorDiplomaPrice",
@@ -285,10 +274,13 @@ public class GenerateReport {
         double c = parsing.getRefundTotalsSum();
         double finalResult = s * k2 - c - oa - ob;
         double royalty = Double.parseDouble(report.getRoyaltyPercentage()) / 100;
-        text = replaceTag(text, "FinalRew", nf.format(finalResult * royalty));
-        text = replaceTag(text, "Final", nf.format(finalResult));
 
-        rewardResult = df.format(finalResult * royalty);
+        double roundedResult = BigDecimal.valueOf(finalResult).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        double roundedFinal = BigDecimal.valueOf(roundedResult * royalty).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        rewardResult = df.format(roundedFinal);
+        text = replaceTag(text, "FinalRew", nf.format(roundedFinal));
+
+        text = replaceTag(text, "Final", nf.format(finalResult));
 
         return text;
     }
@@ -308,14 +300,14 @@ public class GenerateReport {
                 proxyDate = "22.04.2022";
                 break;
             case "Дизайн":
-            //case "Мультимедиа":
+                //case "Мультимедиа":
                 sbSigner.append("Климова Антона Александровича");
                 initials = "А.А. Климов";
                 proxyNumber = "149";
                 proxyDate = "30.07.2021";
                 break;
             case "Игры":
-            //case "Маркетинг":
+                //case "Маркетинг":
                 sbSigner.append("Татьянкина Дениса Александровича");
                 initials = "Д.А. Татьянкин";
                 proxyNumber = "150";
@@ -430,7 +422,7 @@ public class GenerateReport {
         return contractor.getOOOName().equals(OOOName) && report.getCourseCode().equals(courseCode);
     }
 
-    private int countSumForHWAndDiploma(int price, int number){
+    private int countSumForHWAndDiploma(int price, int number) {
         return price * number;
     }
 
@@ -578,7 +570,8 @@ public class GenerateReport {
 
     private String getCorrectReward(double F) {
         if (report.getReportModel().equals("Чистая выручка")) {
-            double reward = F * Double.parseDouble(report.getRoyaltyPercentage()) / 100;
+            double reward = BigDecimal.valueOf(F * Double.parseDouble(report.getRoyaltyPercentage()) / 100)
+                    .setScale(2, RoundingMode.HALF_UP).doubleValue();
             rewardResult = df.format(reward);
         }
         double rewardResDouble = Double.parseDouble(rewardResult);
