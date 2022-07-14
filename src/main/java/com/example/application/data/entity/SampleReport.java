@@ -23,6 +23,7 @@ public class SampleReport extends AbstractEntity {
     private LocalDate contractDate;
     private LocalDate transferDateOfRIA;
     private String k2;
+    private boolean signedEdo;
 
     public int getID() {
         return id;
@@ -138,5 +139,13 @@ public class SampleReport extends AbstractEntity {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), id);
+    }
+
+    public boolean isSignedEdo() {
+        return signedEdo;
+    }
+
+    public void setSignedEdo(boolean signedEdo) {
+        this.signedEdo = signedEdo;
     }
 }

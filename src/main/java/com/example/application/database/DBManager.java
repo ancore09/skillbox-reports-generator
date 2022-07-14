@@ -113,7 +113,7 @@ public class DBManager {
     public static void insertReport(SampleReport report, Set<SampleContractor> contractors) {
         String insertReportQuery =
                 "insert into public.reports (report_model, course_code, course_name, course_direction, royalty_percentage, " +
-                        "course_objects, contract_number, contract_date, transfer_date_of_ria, k2) " +
+                        "course_objects, contract_number, contract_date, transfer_date_of_ria, k2, signedinedo) " +
                         "values ('" + report.getReportModel() + "'," +
                         report.getCourseCode() + ",'" +
                         report.getCourseName() + "','" +
@@ -123,7 +123,8 @@ public class DBManager {
                         report.getContractNumber() + "','" +
                         report.getContractDate() + "','" +
                         report.getTransferDateOfRIA() + "'," +
-                        (report.getK2().equals("") ? null : report.getK2()) + ") returning id";
+                        (report.getK2().equals("") ? null : report.getK2()) + ", " +
+                        report.isSignedEdo() + ") returning id";
         ResultSet rs;
         try {
             Statement statement = connection.createStatement();
@@ -172,6 +173,7 @@ public class DBManager {
                 report.setContractDate(rs.getDate(9).toLocalDate());
                 report.setTransferDateOfRIA(rs.getDate(10).toLocalDate());
                 report.setK2("" + rs.getDouble(11));
+                report.setSignedEdo(rs.getBoolean(12));
 
                 reports.add(report);
             }
@@ -242,11 +244,12 @@ public class DBManager {
                 "contract_number = '" + report.getContractNumber() + "', " +
                 "contract_date = '" + report.getContractDate() + "', " +
                 "transfer_date_of_ria = '" + report.getTransferDateOfRIA() + "', " +
-                "k2 = '" + report.getK2() + "'" + "where id = " + report.getID();
+                "k2 = '" + report.getK2() + "', " +
+                "signedinedo = " + report.isSignedEdo() + " where id = " + report.getID();
         executeStatement(updateReportQuery, "Report: Row is updated");
 
         String deleteQuery = "delete from public.contractors_reports where report_id = " + report.getID();
-        executeStatement(deleteQuery, "Contractors: Rows are deleted");
+        executeStatement(deleteQuery, "CR: Rows are deleted");
 
         StringBuilder insertQuery = new StringBuilder("insert into public.contractors_reports (contractor_id, report_id) values ");
         for (SampleContractor contractor : contractors) {

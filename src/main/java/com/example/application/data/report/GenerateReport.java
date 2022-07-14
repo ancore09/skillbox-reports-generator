@@ -292,6 +292,19 @@ public class GenerateReport {
 
         StringBuilder sbSigner = new StringBuilder();
         sbSigner.append("в лице ");
+        // NEW //
+        if (report.isSignedEdo()) {
+            sbSigner.append("Генерального директора Крутова Дмитрия Валерьевича");
+            initials = "Д.В. Крутов";
+            sbSigner.append(", действующего на основании Устава");
+
+            text = replaceTag(text, "SignerProxy", "Генеральный директор");
+            text = replaceTag(text, "SignerAddInfo", "ООО «СКИЛБОКС»");
+            text = replaceTag(text, "SignerInitials", initials);
+            text = replaceTag(text, "Signer", sbSigner.toString());
+            return text;
+        }
+
         switch (report.getCourseDirection()) {
             case "Программирование":
                 sbSigner.append("Сырычко Александра Васильевича");
@@ -333,6 +346,7 @@ public class GenerateReport {
         String proxy = "на основании доверенности №" + proxyNumber + " от " + proxyDate + " г.";
 
         text = replaceTag(text, "SignerProxy", proxy);
+        text = replaceTag(text, "SignerAddInfo", "");
         text = replaceTag(text, "SignerInitials", initials);
         text = replaceTag(text, "Signer", sbSigner.toString());
 

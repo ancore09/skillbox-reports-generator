@@ -8,6 +8,7 @@ import com.example.application.views.validation.Validator;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -27,7 +28,6 @@ import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.icon.Icon;
 import org.vaadin.gatanaso.MultiselectComboBox;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -49,6 +49,7 @@ public class ReportFormView extends Div {
     private final DatePicker contractDate = new DatePicker("Дата договора");
     private final DatePicker transferDateOfRIA = new DatePicker("Дата передачи РИД");
     private final TextField k2 = new TextField("К2");
+    private final Checkbox signedEdo = new Checkbox("Подписание в ЭДО");
 
     private final Button cancel = new Button("Отмена");
     private final Button save = new Button("Сохранить");
@@ -195,7 +196,7 @@ public class ReportFormView extends Div {
         k2.setEnabled(false);
 
         formLayout.add(reportModel, courseCode, courseName, courseDirection, contractorsRegistered,
-                royaltyPercentage, courseObjects, contractNumber, contractDate, transferDateOfRIA, k2);
+                royaltyPercentage, courseObjects, contractNumber, contractDate, transferDateOfRIA, k2, signedEdo);
         return formLayout;
     }
 

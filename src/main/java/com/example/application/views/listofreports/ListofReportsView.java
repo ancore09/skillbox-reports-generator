@@ -13,6 +13,7 @@ import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.checkbox.CheckboxGroup;
 import com.vaadin.flow.component.checkbox.CheckboxGroupVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -72,7 +73,7 @@ public class ListofReportsView extends Div {
                             ButtonVariant.LUMO_TERTIARY);
                     button.addClickListener(e -> this.removeReport(report));
                     button.setIcon(new Icon(VaadinIcon.TRASH));
-                }));
+                })).setFrozen(true).setWidth("150px").setFlexGrow(0);
 
         Grid.Column<SampleReport> editColumn = grid.addComponentColumn(report -> {
             Button editButton = new Button("Edit");
@@ -82,7 +83,7 @@ public class ListofReportsView extends Div {
                 grid.getEditor().editItem(report);
             });
             return editButton;
-        }).setWidth("150px").setFlexGrow(0);
+        }).setFrozen(true).setWidth("150px").setFlexGrow(0);
 
         Grid.Column<SampleReport> courseCodeColumn = grid.addColumn("courseCode").setHeader("Номер курса").setAutoWidth(true);
         Grid.Column<SampleReport> courseNameColumn = grid.addColumn("courseName").setHeader("Название курса").setWidth("250px").setResizable(true);
@@ -106,6 +107,11 @@ public class ListofReportsView extends Div {
         Grid.Column<SampleReport> contractDateColumn = grid.addColumn("contractDate").setHeader("Дата договора").setAutoWidth(true);
         Grid.Column<SampleReport> transferColumn = grid.addColumn("transferDateOfRIA").setHeader("Дата передачи РИД").setAutoWidth(true);
         Grid.Column<SampleReport> k2Column = grid.addColumn("k2").setHeader("К2").setAutoWidth(true);
+        Grid.Column<SampleReport> signedEDOColumn = grid.addComponentColumn(report -> {
+            Span span = new Span();
+            span.setText(report.isSignedEdo() ? "Да" : "Нет");
+            return span;
+        }).setHeader("Подписание в ЭДО").setAutoWidth(true);
 
         // NEW //
         configureEditor(editor,
@@ -118,7 +124,7 @@ public class ListofReportsView extends Div {
                 royaltyColumn,
                 contractNumberColumn,
                 contractDateColumn,
-                transferColumn, k2Column);
+                transferColumn, k2Column, signedEDOColumn);
 
         grid.setItems(reports);
 
@@ -127,7 +133,7 @@ public class ListofReportsView extends Div {
     }
 
     // NEW //
-    private void configureEditor(Editor<SampleReport> editor, Grid.Column<SampleReport> editColumn, Grid.Column<SampleReport> courseCodeColumn, Grid.Column<SampleReport> courseNameColumn, Grid.Column<SampleReport> courseDirectionColumn, Grid.Column<SampleReport> contractorColumn, Grid.Column<SampleReport> courseObjectColumn, Grid.Column<SampleReport> royaltyColumn, Grid.Column<SampleReport> contractNumberColumn, Grid.Column<SampleReport> contractDateColumn, Grid.Column<SampleReport> transferColumn, Grid.Column<SampleReport> k2Column) {
+    private void configureEditor(Editor<SampleReport> editor, Grid.Column<SampleReport> editColumn, Grid.Column<SampleReport> courseCodeColumn, Grid.Column<SampleReport> courseNameColumn, Grid.Column<SampleReport> courseDirectionColumn, Grid.Column<SampleReport> contractorColumn, Grid.Column<SampleReport> courseObjectColumn, Grid.Column<SampleReport> royaltyColumn, Grid.Column<SampleReport> contractNumberColumn, Grid.Column<SampleReport> contractDateColumn, Grid.Column<SampleReport> transferColumn, Grid.Column<SampleReport> k2Column, Grid.Column<SampleReport> signedEdoColumn) {
         Binder<SampleReport> binder = new Binder<>(SampleReport.class);
         editor.setBinder(binder);
         editor.setBuffered(true);
@@ -212,6 +218,12 @@ public class ListofReportsView extends Div {
                 //.withValidator(s -> s.equals(editor.getItem().getCourseName()), "Bad")
                 .bind(SampleReport::getK2, SampleReport::setK2);
         k2Column.setEditorComponent(k2Field);
+
+        Checkbox signedCheckbox = new Checkbox();
+        signedCheckbox.setWidthFull();
+        binder.forField(signedCheckbox).bind(SampleReport::isSignedEdo, SampleReport::setSignedEdo);
+        signedEdoColumn.setEditorComponent(signedCheckbox);
+
 
         editor.addSaveListener(editorSaveEvent -> {
             // System.out.println("Report: " + editorSaveEvent.getItem().getCourseName() + " Size of set: " + checkboxGroup.getSelectedItems().size());

@@ -39,6 +39,8 @@ public class WordsConverter {
             firstName = firstNameSubstr + "и";
         else if (firstName.charAt(firstName.length() - 1) == 'л' || firstName.charAt(firstName.length() - 1) == 'н')
             firstName += "а";
+        else if (firstName.charAt(firstName.length() - 1) == 'с')
+            firstName += "а";
 
         if (secondName.charAt(secondName.length() - 1) == 'ч')
             secondName += "а";
