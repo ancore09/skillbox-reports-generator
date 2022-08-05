@@ -316,15 +316,15 @@ public class GenerateReport {
                 //case "Мультимедиа":
                 sbSigner.append("Климова Антона Александровича");
                 initials = "А.А. Климов";
-                proxyNumber = "149";
-                proxyDate = "30.07.2021";
+                proxyNumber = "261";
+                proxyDate = "29.07.2022";
                 break;
             case "Игры":
                 //case "Маркетинг":
                 sbSigner.append("Татьянкина Дениса Александровича");
                 initials = "Д.А. Татьянкин";
-                proxyNumber = "150";
-                proxyDate = "30.07.2021";
+                proxyNumber = "262";
+                proxyDate = "29.07.2022";
                 break;
             case "Управление":
                 sbSigner.append("Прудникова Кирилла Павловича");
