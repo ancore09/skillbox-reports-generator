@@ -28,6 +28,7 @@ import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.icon.Icon;
 import org.vaadin.gatanaso.MultiselectComboBox;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -39,10 +40,12 @@ import java.util.Set;
 public class ReportFormView extends Div {
 
     private final ComboBox<String> reportModel = new ComboBox<>("Модель отчёта");
-    private final MultiselectComboBox<SampleContractor> contractorsRegistered = new MultiselectComboBox<>("Контрагенты");
+    //private final MultiselectComboBox<SampleContractor> contractorsRegistered = new MultiselectComboBox<>("Контрагенты");
+    private final ComboBox<SampleContractor> contractorsRegistered = new ComboBox<>("Контрагент");
     private final TextField courseCode = new TextField("Номер курса");
     private final TextField courseName = new TextField("Название курса");
-    private final TextField courseDirection = new TextField("Направление курса");
+    //private final TextField courseDirection = new TextField("Направление курса");
+    private final ComboBox<String> courseDirection = new ComboBox<>("Направление курса");
     private final MultiselectComboBox<String> courseObjects = new MultiselectComboBox<>("Предмет договора");
     private final TextField royaltyPercentage = new TextField("Ставка по роялти");
     private final TextField contractNumber = new TextField("Номер договора");
@@ -109,7 +112,13 @@ public class ReportFormView extends Div {
                 reportService.update(report);
 
                 // DBManager.insertRowIntoReports(binder);
-                DBManager.insertReport(report, contractorsRegistered.getSelectedItems());
+                //System.out.println(report);
+                //System.out.println(contractorsRegistered.getValue());
+                //DBManager.insertReport(report, contractorsRegistered.getSelectedItems());
+                Set<SampleContractor> set = new HashSet<>();
+                set.add(contractorsRegistered.getValue());
+
+                DBManager.insertReport(report, set);
                 Notification.show("Информация об отчёте сохранена");
                 clearForm();
             }
@@ -139,6 +148,7 @@ public class ReportFormView extends Div {
         contractorsRegistered.setRequired(true);
         courseCode.setRequired(true);
         courseName.setRequired(true);
+        //courseDirection.setRequired(true);
         courseDirection.setRequired(true);
         courseObjects.setRequired(true);
         royaltyPercentage.setRequired(true);
@@ -151,10 +161,12 @@ public class ReportFormView extends Div {
 
     private boolean checkRequiredFields() {
         return !reportModel.getValue().equals("") &&
-                !contractorsRegistered.getValue().isEmpty() &&
+                //!contractorsRegistered.getValue().isEmpty() &&
+                !contractorsRegistered.isEmpty() &&
                 !courseCode.getValue().equals("") &&
                 !courseName.getValue().equals("") &&
-                !courseDirection.getValue().equals("") &&
+                //!courseDirection.getValue().equals("") &&
+                !courseDirection.isEmpty() &&
                 !courseObjects.isEmpty() &&
                 !royaltyPercentage.getValue().equals("") &&
                 !contractNumber.getValue().equals("") &&
@@ -171,7 +183,8 @@ public class ReportFormView extends Div {
     private void clearForm() {
         binder.setBean(new SampleReport());
         k2.setEnabled(false);
-        contractorsRegistered.deselectAll();
+        //contractorsRegistered.deselectAll();
+        contractorsRegistered.clear();
         courseObjects.deselectAll();
     }
 
@@ -183,9 +196,13 @@ public class ReportFormView extends Div {
         FormLayout formLayout = new FormLayout();
         reportModel.setItems("Чистая выручка", "Модель К2");
         courseObjects.setItems("Сценарий", "Материалы", "Программа", "Исполнение");
+        courseDirection.setItems("Программирование", "Игры", "Управление", "Маркетинг", "Мультимедиа", "Дизайн", "Инженерия", "Общее образование");
 
         List<SampleContractor> contractors = DBManager.getRowsFromContractorsTable();
         contractorsRegistered.setItemLabelGenerator(contractor -> {
+            if (contractor.getContractorType().equals("Юридическое лицо")) {
+                return contractor.getOOOName();
+            }
             return contractor.getLastName() + " " + contractor.getFirstName() + " " + contractor.getSecondName();
         });
         contractorsRegistered.setItems(contractors);

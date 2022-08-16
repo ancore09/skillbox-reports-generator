@@ -148,4 +148,23 @@ public class SampleReport extends AbstractEntity {
     public void setSignedEdo(boolean signedEdo) {
         this.signedEdo = signedEdo;
     }
+
+    @Override
+    public String toString() {
+        return "SampleReport{" +
+                "id=" + id +
+                ", reportModel='" + reportModel + '\'' +
+                ", courseCode='" + courseCode + '\'' +
+                ", courseName='" + courseName + '\'' +
+                ", courseDirection='" + courseDirection + '\'' +
+                ", courseObject='" + courseObject + '\'' +
+                ", contractor='" + contractor + '\'' +
+                ", royaltyPercentage='" + royaltyPercentage + '\'' +
+                ", contractNumber='" + contractNumber + '\'' +
+                ", contractDate=" + contractDate +
+                ", transferDateOfRIA=" + transferDateOfRIA +
+                ", k2='" + k2 + '\'' +
+                ", signedEdo=" + signedEdo +
+                '}';
+    }
 }

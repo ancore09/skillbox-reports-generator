@@ -170,4 +170,26 @@ public class SampleContractor extends AbstractEntity {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Override
+    public String toString() {
+        return "SampleContractor{" +
+                "id=" + id +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", secondName='" + secondName + '\'' +
+                ", contractorType='" + contractorType + '\'' +
+                ", OOOForm='" + OOOForm + '\'' +
+                ", OOOName='" + OOOName + '\'' +
+                ", taxPercentage='" + taxPercentage + '\'' +
+                ", signatoryPosition='" + signatoryPosition + '\'' +
+                ", selfemployedDate=" + selfemployedDate +
+                ", registrationCertificateNumber='" + registrationCertificateNumber + '\'' +
+                ", registrationCertificateDate=" + registrationCertificateDate +
+                ", registrationNumber='" + registrationNumber + '\'' +
+                ", ITN='" + ITN + '\'' +
+                ", proxyNumber='" + proxyNumber + '\'' +
+                ", proxyDate=" + proxyDate +
+                '}';
+    }
 }

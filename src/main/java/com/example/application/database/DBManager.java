@@ -29,7 +29,7 @@ public class DBManager {
         try {
             // TODO Change credentials
             connection = DriverManager
-                    .getConnection("jdbc:postgresql://185.182.111.179:5432/skillboxreports_new",
+                    .getConnection("jdbc:postgresql://172.18.0.2:5432/skillboxreports_new",
                             "postgres", "outofstyle");
 
             isConnected = true;
